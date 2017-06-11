@@ -1,0 +1,2 @@
+Proyecto sin maven spring batch complejo. Basado en el código de
+Spring Batch in Action.
