@@ -1,2 +1,47 @@
 Proyecto sin maven spring batch complejo. Basado en el código de
-Spring Batch in Action.
+Spring Batch in Action. El proceso consiste en la lectura de un fichero
+con información sobre los productos de un catálogo y el paso de esa
+información a una base de datos.
+
+Versiones
+=========
+
+* Ch 01 - Lectura directa del txt, escritura en consola
+
+Sólo hay un step que lee la info del fichero data/products.txt, no usa job parameters para especificar 
+los inputs y los output y el output va a consola. El reader tiene un skip-limit y un 
+elemento <skippable-exception-classes> que se puede comentar para ver cómo falla todo cuando 
+hay un error en el fichero de entrada.
+
+La clase que lo lanza todo es TestSCBatch. config/job-context.xml une los dos ficheros de
+configuración, import-products-job-context.xml, que configura el job, y console-context.xml,
+que configura la arquitectura (job launcher, repository, transaction manager, etc.).
+
+Product es el modelo. ProductFieldSetMapper mapea los campos del fichero de datos al modelo,
+ProductConsoleItemWriter se encarga de escribir la info en la consola.
+
+* Ch 01 - Descomprensión de zip, escritura en consola
+
+Como el anterior pero ahora hay un step previo para extraer el .txt de un fichero zip.
+Organizamos mejor los ficheros de entrada (data/input) y los de salida (data/target).
+
+DecompressTasklet es la tarea descompresora.
+
+* Ch 01 (bien) - Descomprensión de zip, escritura en bd, no fallo en excepción de parseo (antes tampoco).
+
+La salida es a una tabla en la bd. Usamos mysql-context.xml en vez de console-context.xml
+para configurar la salida a la bd, y ProductJdbcItemWriter es el ItemWriter de bd.
+bd/create-products-db.sql es el script de creación, e init-products-db.sql es un script
+invocado por spring al lanzar la app (<jdbc:initialize-database> en mysql-context.xml) para
+resetear la bd y dejar sólo un producto.
+
+* Ch 02 - JobRepository en bd acme_catalog
+
+El job repository está también en la bd. El script de creación de tablas está en el paquete
+org.springframework.batch.core del jar de spring-batch-core, y lo hemos copiado a bd.
+
+TestSCBatch cambia su parámetro timestamp para poder repetirlo y que el job lance una
+excepción porque no se puede repetir un jobinstance con parámetros similares. Si cambiamos
+el zip por products_corrupted.zip el trabajo no se lanza porque el archivo está corrupto.
+
+Se puede ver todo con la app spring batch admin (si llego a poder configurarla :) ).
