@@ -45,6 +45,6 @@
 		</property>
 	</bean>
 	
-	<bean id="writer" class="profe.springbatch.simplecatalogbatch.batch.ProductConsoleItemWriter" />
+	<bean id="writer" class="profe.springbatch.simplecatalogbatch.batch.ProductJdbcItemWriter" />
 
 </beans>

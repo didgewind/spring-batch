@@ -28,7 +28,7 @@ public class TestSCBatch {
 		jobLauncher.run(job, new JobParametersBuilder()
 				.addString("inputResource", "file:data/input/products.zip")
 				.addString("targetDirectory", "./data/target/")
-				.addString("targetFile","products.txt")
+				.addString("targetFile", "products.txt")
 				.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters()
 			);

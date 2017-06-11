@@ -6,6 +6,6 @@
 
 
 	<import resource="classpath:import-products-job-context.xml" />
-	<import resource="classpath:console-context.xml" />
+	<import resource="classpath:mysql-context.xml" />
 
 </beans>
