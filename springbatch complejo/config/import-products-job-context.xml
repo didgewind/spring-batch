@@ -8,6 +8,9 @@
 	http://www.springframework.org/schema/batch/spring-batch.xsd">
 
 	<job id="importProducts" xmlns="http://www.springframework.org/schema/batch">
+ 		<step id="decompress" next="readWriteProducts">
+			<tasklet ref="decompressTasklet" />
+		</step>
 		<step id="readWriteProducts">
 			<tasklet>
 				<chunk reader="reader" writer="writer" commit-interval="3" skip-limit="5">
@@ -19,10 +22,14 @@
 		</step>
 	</job>
 	
-
+	<bean id="decompressTasklet" class="profe.springbatch.simplecatalogbatch.batch.DecompressTasklet" scope="step">
+		<property name="inputResource" value="#{jobParameters['inputResource']}" />
+		<property name="targetDirectory" value="#{jobParameters['targetDirectory']}" />
+		<property name="targetFile" value="#{jobParameters['targetFile']}" />
+	</bean>
 	
 	<bean id="reader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
-		<property name="resource" value="file:data/products.txt" />
+		<property name="resource" value="file:#{jobParameters['targetDirectory'] + jobParameters['targetFile']}" />
 		<property name="linesToSkip" value="1" />
 		<property name="lineMapper">
 			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">

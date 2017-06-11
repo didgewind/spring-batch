@@ -26,9 +26,9 @@ public class TestSCBatch {
 
 	private void go() throws Exception {
 		jobLauncher.run(job, new JobParametersBuilder()
-				/*.addString("inputResource", "classpath:/input/products.zip")
-				.addString("targetDirectory", "./target/importproductsbatch/")
-				.addString("targetFile","products.txt")*/
+				.addString("inputResource", "file:data/input/products.zip")
+				.addString("targetDirectory", "./data/target/")
+				.addString("targetFile","products.txt")
 				.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters()
 			);
