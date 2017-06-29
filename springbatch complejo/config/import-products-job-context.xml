@@ -30,23 +30,17 @@
 	
 	<bean id="reader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
 		<property name="resource" value="file:#{jobParameters['targetDirectory'] + jobParameters['targetFile']}" />
-		<property name="linesToSkip" value="1" />
-		<property name="lineMapper">
-			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-				<property name="lineTokenizer" ref="fixedLengthProductsTokenizer" />
-				<property name="fieldSetMapper">
-					<bean class="profe.springbatch.simplecatalogbatch.batch.ProductFieldSetMapper" />
-				</property>
-			</bean>
-		</property>
+		<property name="lineMapper" ref="jsonProductsMapper" />
+		<property name="recordSeparatorPolicy" ref="jsonRecordSepPolicy" />
 	</bean>
 
-	<bean id="fixedLengthProductsTokenizer"
-			class="org.springframework.batch.item.file.transform.FixedLengthTokenizer">
-		<property name="columns" value="1-9,10-35,36-50,51-56" />
-		<property name="names" value="PRODUCT_ID,NAME,DESCRIPTION,PRICE" />
-	</bean>
-			
+	<bean id="jsonRecordSepPolicy" class="org.springframework.batch.item.file.separator.JsonRecordSeparatorPolicy"/>
+
+	<bean id="jsonProductsMapper"
+		class="profe.springbatch.simplecatalogbatch.batch.JSONWrapperMapper" />
+		
+	<bean id="jsonLineMapper" class="org.springframework.batch.item.file.mapping.JsonLineMapper" />
+		
 	
 	<bean id="writer" class="profe.springbatch.simplecatalogbatch.batch.ProductJdbcItemWriter" />
 

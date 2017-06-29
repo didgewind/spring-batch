@@ -67,3 +67,9 @@ El job-context importa los xmls necesarios.
 
 Leemos de products-fixed.txt con un FixedLengthTokenizer en vez de un
 DelimitedLineTokenizer
+
+* Ch 05 - Products reader Json
+
+Leemos de products.json con un JsonLineMapper encapsulado en una clase propia,
+JSONWrapperMapper. Hay que usar un recordSeparatorPolicy específico para Json.
+
