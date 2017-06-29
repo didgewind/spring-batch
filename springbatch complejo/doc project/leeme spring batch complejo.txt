@@ -43,5 +43,22 @@ org.springframework.batch.core del jar de spring-batch-core, y lo hemos copiado 
 TestSCBatch cambia su parámetro timestamp para poder repetirlo y que el job lance una
 excepción porque no se puede repetir un jobinstance con parámetros similares. Si cambiamos
 el zip por products_corrupted.zip el trabajo no se lanza porque el archivo está corrupto.
+ATENCIÓN: EN ESTE CASO ES IMPORTANTE QUE LA LIBRERÍA JETTISON SEA LA 1.1, Y NO LA 1.3.8,
+COMO ESTABA EN ANTERIORES COMMITS
 
 Se puede ver todo con la app spring batch admin (si llego a poder configurarla :) ).
+
+
+* Empleados reader delimited
+
+Tenemos un fichero de empleados en single line con campos delimitados por #,
+que importamos en una tabla de la bd. Usamos un FlatFileItemReader
+que se apoya en un DefaultLineMapper que se apoya a su vez
+en un DelimitedLineTokenizer (para tokenizar cada campo de la línea) y en
+un BeanWrapperFieldSetMapper (para generar el objeto Empleado a partir de 
+esos campos).
+
+Usamos un writer de Jdbc personalizado.
+
+El job-context importa los xmls necesarios.
+
