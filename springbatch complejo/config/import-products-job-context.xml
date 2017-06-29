@@ -8,9 +8,9 @@
 	http://www.springframework.org/schema/batch/spring-batch.xsd">
 
 	<job id="importProducts" xmlns="http://www.springframework.org/schema/batch">
- 		<step id="decompress" next="readWriteProducts">
+<!--  		<step id="decompress" next="readWriteProducts">
 			<tasklet ref="decompressTasklet" />
-		</step>
+		</step> -->
 		<step id="readWriteProducts">
 			<tasklet>
 				<chunk reader="reader" writer="writer" commit-interval="3" skip-limit="5">
@@ -33,17 +33,20 @@
 		<property name="linesToSkip" value="1" />
 		<property name="lineMapper">
 			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-				<property name="lineTokenizer">
-					<bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
-						<property name="names" value="PRODUCT_ID,NAME,DESCRIPTION,PRICE" />
-					</bean>
-				</property>
+				<property name="lineTokenizer" ref="fixedLengthProductsTokenizer" />
 				<property name="fieldSetMapper">
 					<bean class="profe.springbatch.simplecatalogbatch.batch.ProductFieldSetMapper" />
 				</property>
 			</bean>
 		</property>
 	</bean>
+
+	<bean id="fixedLengthProductsTokenizer"
+			class="org.springframework.batch.item.file.transform.FixedLengthTokenizer">
+		<property name="columns" value="1-9,10-35,36-50,51-56" />
+		<property name="names" value="PRODUCT_ID,NAME,DESCRIPTION,PRICE" />
+	</bean>
+			
 	
 	<bean id="writer" class="profe.springbatch.simplecatalogbatch.batch.ProductJdbcItemWriter" />
 

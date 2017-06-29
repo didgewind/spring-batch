@@ -62,3 +62,8 @@ Usamos un writer de Jdbc personalizado.
 
 El job-context importa los xmls necesarios.
 
+
+* Ch 05 - Products reader fixed length
+
+Leemos de products-fixed.txt con un FixedLengthTokenizer en vez de un
+DelimitedLineTokenizer

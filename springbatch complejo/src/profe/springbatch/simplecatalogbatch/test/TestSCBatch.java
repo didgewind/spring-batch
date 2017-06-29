@@ -34,11 +34,10 @@ public class TestSCBatch {
 		String dateInString = "13-06-2017 11:20:56";
 		Date date = sdf.parse(dateInString);
 		jobLauncher.run(job, new JobParametersBuilder()
-				.addString("inputResource", "file:data/input/products.zip")
 				.addString("targetDirectory", "./data/target/")
-				.addString("targetFile", "products.txt")
-				.addLong("timestamp", date.getTime())
-//				.addLong("timestamp", System.currentTimeMillis())
+				.addString("targetFile", "products-fixed.txt")
+//				.addLong("timestamp", date.getTime())
+				.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters()
 			);
 	}
