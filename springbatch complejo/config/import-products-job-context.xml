@@ -1,47 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:batch="http://www.springframework.org/schema/batch"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:batch="http://www.springframework.org/schema/batch"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 	http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/batch 
 	http://www.springframework.org/schema/batch/spring-batch.xsd">
 
 	<job id="importProducts" xmlns="http://www.springframework.org/schema/batch">
-<!--  		<step id="decompress" next="readWriteProducts">
-			<tasklet ref="decompressTasklet" />
-		</step> -->
+		<!-- <step id="decompress" next="readWriteProducts"> <tasklet ref="decompressTasklet" 
+			/> </step> -->
 		<step id="readWriteProducts">
 			<tasklet>
-				<chunk reader="reader" writer="writer" commit-interval="3" skip-limit="5">
+				<chunk reader="reader" writer="writer" commit-interval="3"
+					skip-limit="5">
 					<skippable-exception-classes>
-						<include class="org.springframework.batch.item.file.FlatFileParseException" />
+						<include
+							class="org.springframework.batch.item.file.FlatFileParseException" />
 					</skippable-exception-classes>
 				</chunk>
-			</tasklet>			
+			</tasklet>
 		</step>
 	</job>
-	
-	<bean id="decompressTasklet" class="profe.springbatch.simplecatalogbatch.batch.DecompressTasklet" scope="step">
+
+	<bean id="decompressTasklet"
+		class="profe.springbatch.simplecatalogbatch.batch.DecompressTasklet"
+		scope="step">
 		<property name="inputResource" value="#{jobParameters['inputResource']}" />
 		<property name="targetDirectory" value="#{jobParameters['targetDirectory']}" />
 		<property name="targetFile" value="#{jobParameters['targetFile']}" />
 	</bean>
-	
-	<bean id="reader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
-		<property name="resource" value="file:#{jobParameters['targetDirectory'] + jobParameters['targetFile']}" />
-		<property name="lineMapper" ref="jsonProductsMapper" />
-		<property name="recordSeparatorPolicy" ref="jsonRecordSepPolicy" />
+
+	<bean id="reader" class="org.springframework.batch.item.file.FlatFileItemReader"
+		scope="step">
+		<property name="resource"
+			value="file:#{jobParameters['targetDirectory'] + jobParameters['targetFile']}" />
+		<property name="lineMapper" ref="defLineMapper" />
+		<property name="recordSeparatorPolicy" ref="multilineRecordSepPolicy" />
 	</bean>
 
-	<bean id="jsonRecordSepPolicy" class="org.springframework.batch.item.file.separator.JsonRecordSeparatorPolicy"/>
+	<bean id="defLineMapper"
+		class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+		<property name="lineTokenizer" ref="productsDelLineTokenizer" />
+		<property name="fieldSetMapper" ref="productFieldSetMapper" />
+	</bean>
 
-	<bean id="jsonProductsMapper"
-		class="profe.springbatch.simplecatalogbatch.batch.JSONWrapperMapper" />
-		
-	<bean id="jsonLineMapper" class="org.springframework.batch.item.file.mapping.JsonLineMapper" />
-		
-	
-	<bean id="writer" class="profe.springbatch.simplecatalogbatch.batch.ProductJdbcItemWriter" />
+	<bean id="productsDelLineTokenizer"
+		class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+		<property name="names" value="PRODUCT_ID,NAME,DESCRIPTION,PRICE" />
+	</bean>
+
+	<bean id="productFieldSetMapper"
+		class="profe.springbatch.simplecatalogbatch.batch.ProductFieldSetMapper" />
+
+	<bean id="multilineRecordSepPolicy"
+		class="profe.springbatch.simplecatalogbatch.batch.ProdTwoLinesSeparatorPolicy" />
+
+	<bean id="writer"
+		class="profe.springbatch.simplecatalogbatch.batch.ProductJdbcItemWriter" />
 
 </beans>

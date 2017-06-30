@@ -73,3 +73,8 @@ DelimitedLineTokenizer
 Leemos de products.json con un JsonLineMapper encapsulado en una clase propia,
 JSONWrapperMapper. Hay que usar un recordSeparatorPolicy específico para Json.
 
+* Ch 05 - Products reader multiline
+
+Leemos de un fichero con registros multilínea. Especificamos una política
+de separación de registros personalizada (cuando leamos tres comas ya se ha
+leído el registro)
