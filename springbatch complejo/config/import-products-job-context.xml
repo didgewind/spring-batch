@@ -11,7 +11,7 @@
 			/> </step> -->
 		<step id="readWriteProducts">
 			<tasklet>
-				<chunk reader="reader" writer="writer" commit-interval="3"
+				<chunk reader="productsReader" writer="productsJdbcWriter" commit-interval="3"
 					skip-limit="5">
 					<skippable-exception-classes>
 						<include
@@ -30,7 +30,7 @@
 		<property name="targetFile" value="#{jobParameters['targetFile']}" />
 	</bean>
 
-	<bean id="reader" class="org.springframework.batch.item.file.FlatFileItemReader"
+	<bean id="productsReader" class="org.springframework.batch.item.file.FlatFileItemReader"
 		scope="step">
 		<property name="resource"
 			value="file:#{jobParameters['targetDirectory'] + jobParameters['targetFile']}" />
@@ -55,7 +55,7 @@
 	<bean id="multilineRecordSepPolicy"
 		class="profe.springbatch.simplecatalogbatch.batch.ProdTwoLinesSeparatorPolicy" />
 
-	<bean id="writer"
+	<bean id="productsJdbcWriter"
 		class="profe.springbatch.simplecatalogbatch.batch.ProductJdbcItemWriter" />
 
 </beans>

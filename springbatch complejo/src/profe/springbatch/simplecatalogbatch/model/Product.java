@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * @author acogoluegnes
  *
  */
-public class Product implements Serializable {
+public class Product implements Serializable, Item {
 
 	/**
 	 * 

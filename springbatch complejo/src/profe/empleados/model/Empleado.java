@@ -2,13 +2,15 @@ package profe.empleados.model;
 
 import java.io.Serializable;
 
+import profe.springbatch.simplecatalogbatch.model.Item;
+
 
 /**
  * Clase Empleado sin dependencias externas
  * @author made
  *
  */
-public class Empleado implements Serializable, Cloneable {
+public class Empleado implements Serializable, Cloneable, Item {
 
 	private String cif;
 	private String nombre;

@@ -78,3 +78,13 @@ JSONWrapperMapper. Hay que usar un recordSeparatorPolicy específico para Json.
 Leemos de un fichero con registros multilínea. Especificamos una política
 de separación de registros personalizada (cuando leamos tres comas ya se ha
 leído el registro)
+
+* Ch 05 - Fichero con productos y empleados
+
+Leemos de un fichero con registros Empleado y Producto. Ambas clases del modelo
+implementan Item, que es un interfaz de marca al que hacemos referencia en el
+writer (GenericItemWriter). Este writer delega a su vez en el writer correspondiente.
+
+Para leer usamos un PatternMatchingCompositeLineMapper que delega en el tokenizer
+correspondiente en función del comienzo de la línea (PR* si es un producto, cualquier
+otra cosa si es un empleado)
