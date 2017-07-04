@@ -19,7 +19,7 @@ public class TestSCBatch {
 	@Autowired
 	private JobLauncher jobLauncher;
 	
-	@Resource(name="importProducts")
+	@Resource(name="showProductsFromDb")
 	private Job job;
 	
 	public static void main(String[] args) throws Exception {
@@ -30,14 +30,7 @@ public class TestSCBatch {
 	}
 
 	private void go() throws Exception {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-		String dateInString = "13-06-2017 11:20:56";
-		Date date = sdf.parse(dateInString);
 		jobLauncher.run(job, new JobParametersBuilder()
-				.addString("targetDirectory", "./data/target/")
-				.addString("xmlProductsFile", "products.xml")
-				.addString("productsMappingFile", "mapping.xml")
-//				.addLong("timestamp", date.getTime())
 				.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters()
 			);

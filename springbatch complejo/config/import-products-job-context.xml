@@ -6,42 +6,29 @@
 	http://www.springframework.org/schema/batch 
 	http://www.springframework.org/schema/batch/spring-batch.xsd">
 
-	<job id="importProducts" xmlns="http://www.springframework.org/schema/batch">
+	<job id="showProductsFromDb" xmlns="http://www.springframework.org/schema/batch">
 		<!-- <step id="decompress" next="readWriteProducts"> <tasklet ref="decompressTasklet" 
 			/> </step> -->
 		<step id="readWriteProducts">
 			<tasklet>
-				<chunk reader="productsXmlReader" writer="productsJdbcWriter" commit-interval="3"
-					skip-limit="5">
-					<skippable-exception-classes>
-						<include
-							class="org.springframework.batch.item.file.FlatFileParseException" />
-					</skippable-exception-classes>
-				</chunk>
+				<chunk reader="productsJdbcReader" writer="productsConsoleWriter" commit-interval="3" />
 			</tasklet>
 		</step>
 	</job>
 
-	<bean id="decompressTasklet"
-		class="profe.springbatch.simplecatalogbatch.batch.DecompressTasklet"
-		scope="step">
-		<property name="inputResource" value="#{jobParameters['inputResource']}" />
-		<property name="targetDirectory" value="#{jobParameters['targetDirectory']}" />
-		<property name="targetFile" value="#{jobParameters['targetFile']}" />
+	<bean id="productsJdbcReader"
+			class="org.springframework.batch.item.database.JdbcCursorItemReader">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="sql" value="select id, name, description, price from products"/>
+		<property name="rowMapper" ref="productRowMapper"/>
 	</bean>
 
-	<bean id="productsXmlReader"
-			class="org.springframework.batch.item.xml.StaxEventItemReader" scope="step">
-		<property name="resource" value="file:#{ jobParameters['targetDirectory'] + jobParameters['xmlProductsFile'] }"/>
-		<property name="fragmentRootElementName" value="product"/>
-		<property name="unmarshaller" ref="productMarshaller"/>
-	</bean>
+	<bean id="productRowMapper"
+		class="profe.springbatch.simplecatalogbatch.batch.ProductRowMapper"/>
 
-	<bean id="productMarshaller"
-			class="org.springframework.oxm.castor.CastorMarshaller" scope="step">
-		<property name="mappingLocation"
-				value="file:#{ jobParameters['targetDirectory'] + jobParameters['productsMappingFile'] }"/>
-	</bean>
+	<bean id="productsConsoleWriter"
+		class="profe.springbatch.simplecatalogbatch.batch.ProductConsoleItemWriter"
+		scope="step" />
 	
 	<bean id="productsDelLineTokenizer"
 		class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
@@ -50,9 +37,6 @@
 
 	<bean id="productFieldSetMapper"
 		class="profe.springbatch.simplecatalogbatch.batch.ProductFieldSetMapper" />
-
-	<bean id="multilineRecordSepPolicy"
-		class="profe.springbatch.simplecatalogbatch.batch.ProdTwoLinesSeparatorPolicy" />
 
 	<bean id="productsJdbcWriter"
 		class="profe.springbatch.simplecatalogbatch.batch.ProductJdbcItemWriter" />

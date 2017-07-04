@@ -94,3 +94,9 @@ otra cosa si es un empleado)
 El reader es un StaxEventItemReader, que se apoya en un unmarshaller CastorMarshaller
 que utiliza a su vez mapping.xml para mapear el producto con el elemento <product> del
 fichero .xml
+
+* Ch 05 - Lectura de productos de bd
+
+Leemos los productos de la bd mediante un JdbcCursorItemReader que se apoya en un
+rowMapper personalizado, y usamos un writer personalizado (ProductConsoleItemWriter)
+para mostrarlos en consola
