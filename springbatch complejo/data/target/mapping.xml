@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE mapping PUBLIC
+        "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+        "http://castor.org/mapping.dtd">
+<mapping>
+  <class name="profe.springbatch.simplecatalogbatch.model.Product">
+    <map-to xml="product" />
+    <field name="id" type="java.lang.String">
+      <bind-xml name="id" node="element"/>
+    </field>
+    <field name="name" type="java.lang.String">
+      <bind-xml name="name" node="element"/>
+    </field>
+    <field name="description" type="java.lang.String">
+      <bind-xml name="description" node="element"/>
+    </field>
+    <field name="price" type="java.math.BigDecimal">
+      <bind-xml name="price" node="element"/>
+    </field>
+  </class>
+</mapping>
+

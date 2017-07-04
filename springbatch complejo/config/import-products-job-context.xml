@@ -11,7 +11,7 @@
 			/> </step> -->
 		<step id="readWriteProducts">
 			<tasklet>
-				<chunk reader="productsReader" writer="productsJdbcWriter" commit-interval="3"
+				<chunk reader="productsXmlReader" writer="productsJdbcWriter" commit-interval="3"
 					skip-limit="5">
 					<skippable-exception-classes>
 						<include
@@ -30,20 +30,19 @@
 		<property name="targetFile" value="#{jobParameters['targetFile']}" />
 	</bean>
 
-	<bean id="productsReader" class="org.springframework.batch.item.file.FlatFileItemReader"
-		scope="step">
-		<property name="resource"
-			value="file:#{jobParameters['targetDirectory'] + jobParameters['targetFile']}" />
-		<property name="lineMapper" ref="defLineMapper" />
-		<property name="recordSeparatorPolicy" ref="multilineRecordSepPolicy" />
+	<bean id="productsXmlReader"
+			class="org.springframework.batch.item.xml.StaxEventItemReader" scope="step">
+		<property name="resource" value="file:#{ jobParameters['targetDirectory'] + jobParameters['xmlProductsFile'] }"/>
+		<property name="fragmentRootElementName" value="product"/>
+		<property name="unmarshaller" ref="productMarshaller"/>
 	</bean>
 
-	<bean id="defLineMapper"
-		class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
-		<property name="lineTokenizer" ref="productsDelLineTokenizer" />
-		<property name="fieldSetMapper" ref="productFieldSetMapper" />
+	<bean id="productMarshaller"
+			class="org.springframework.oxm.castor.CastorMarshaller" scope="step">
+		<property name="mappingLocation"
+				value="file:#{ jobParameters['targetDirectory'] + jobParameters['productsMappingFile'] }"/>
 	</bean>
-
+	
 	<bean id="productsDelLineTokenizer"
 		class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
 		<property name="names" value="PRODUCT_ID,NAME,DESCRIPTION,PRICE" />

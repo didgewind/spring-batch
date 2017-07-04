@@ -35,7 +35,8 @@ public class TestSCBatch {
 		Date date = sdf.parse(dateInString);
 		jobLauncher.run(job, new JobParametersBuilder()
 				.addString("targetDirectory", "./data/target/")
-				.addString("targetFile", "products-delimited-two-lines.txt")
+				.addString("xmlProductsFile", "products.xml")
+				.addString("productsMappingFile", "mapping.xml")
 //				.addLong("timestamp", date.getTime())
 				.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters()

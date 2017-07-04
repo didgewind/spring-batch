@@ -88,3 +88,9 @@ writer (GenericItemWriter). Este writer delega a su vez en el writer correspondi
 Para leer usamos un PatternMatchingCompositeLineMapper que delega en el tokenizer
 correspondiente en función del comienzo de la línea (PR* si es un producto, cualquier
 otra cosa si es un empleado)
+
+* Ch 05 - Reader Productos Xml
+
+El reader es un StaxEventItemReader, que se apoya en un unmarshaller CastorMarshaller
+que utiliza a su vez mapping.xml para mapear el producto con el elemento <product> del
+fichero .xml
