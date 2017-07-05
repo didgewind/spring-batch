@@ -6,59 +6,112 @@
 	http://www.springframework.org/schema/batch 
 	http://www.springframework.org/schema/batch/spring-batch.xsd">
 
-	<batch:job id="importMultiItems" restartable="true">
-		<batch:step id="readWriteMultiItems">
-			<batch:tasklet>
-				<batch:chunk reader="multiItemsDelOneLineReader" writer="itemJdbcWriter"
+	<job id="importEmpleados" restartable="true"
+		xmlns="http://www.springframework.org/schema/batch">
+		<step id="readWriteEmpleadosDelOneLine" next="readWriteEmpleadosDelMultiLine">
+			<tasklet>
+				<chunk reader="empleadosReaderDelOneLine" writer="empleadosJdbcItemWriter"
+					commit-interval="3" skip-limit="1">
+					<skippable-exception-classes>
+						<include
+							class="org.springframework.batch.item.file.FlatFileParseException" />
+					</skippable-exception-classes>
+				</chunk>
+			</tasklet>
+		</step>
+		<step id="readWriteEmpleadosDelMultiLine" next="readWriteEmpleadosJson">
+			<tasklet>
+				<chunk reader="empleadosReaderDelMultiLine" writer="empleadosJdbcItemWriter"
+					commit-interval="3" />
+			</tasklet>
+		</step>
+		<step id="readWriteEmpleadosJson" next="muestraBdEmpleados">
+			<tasklet>
+				<chunk reader="empleadosReaderJson" writer="empleadosJdbcItemWriter"
 					commit-interval="3">
-				</batch:chunk>
-			</batch:tasklet>
-		</batch:step>
-	</batch:job>
+				</chunk>
+			</tasklet>
+		</step>
+		<step id="muestraBdEmpleados">
+			<tasklet>
+				<chunk reader="empleadosJdbcReader" writer="empleadosConsoleWriter"
+					commit-interval="3">
+				</chunk>
+			</tasklet>
+		</step>
+	</job>
 
-	<bean id="itemJdbcWriter" class="profe.springbatch.simplecatalogbatch.batch.GenericItemWriter" />
-	
-	<bean id="multiItemsDelOneLineReader" class="org.springframework.batch.item.file.FlatFileItemReader"
+	<bean id="empleadosReaderDelOneLine" class="org.springframework.batch.item.file.FlatFileItemReader"
 		scope="step">
 		<property name="resource"
-			value="file:#{ jobParameters['inputDir'] + jobParameters['inputMultiItemsFileDelOneLine'] }" />
+			value="file:#{ jobParameters['inputDir'] + jobParameters['inputFileDelOneLine'] }" />
 		<property name="encoding" value="UTF-8" />
-		<property name="lineMapper" ref="multiItemsLineMapper" />
+		<property name="lineMapper" ref="empleadosDefLineMapper" />
 	</bean>
 
-	<bean id="multiItemsLineMapper"
-			class="org.springframework.batch.item.file.mapping.PatternMatchingCompositeLineMapper">
-		<property name="tokenizers">
-			<map>
-				<entry key="PR*" value-ref="productsDelLineTokenizer"/>
-				<entry key="*" value-ref="delimitedLineEmpleadosTokenizer"/>
-			</map>
-		</property>
-		<property name="fieldSetMappers">
-			<map>
-				<entry key="PR*">
-					<bean class="profe.springbatch.simplecatalogbatch.batch.ProductFieldSetMapper" />
-				</entry>
-				<entry key="*" value-ref="empleadoBeanWrapperFieldSetMapper"/>
-			</map>
-		</property>
+	<bean id="empleadosReaderDelMultiLine" class="org.springframework.batch.item.file.FlatFileItemReader"
+		scope="step">
+		<property name="resource"
+			value="file:#{ jobParameters['inputDir'] + jobParameters['inputFileDelMultiLine'] }" />
+		<property name="encoding" value="UTF-8" />
+		<property name="lineMapper" ref="empleadosDefLineMapper" />
+		<property name="recordSeparatorPolicy" ref="puntoYComaRecordSepPolicy" />
 	</bean>
 
-	<bean id="delimitedLineEmpleadosTokenizer"
+	<bean id="puntoYComaRecordSepPolicy" class="profe.empleados.batch.readers.PuntoYComaRecordSepPolicy" />
+
+	<bean id="empleadosDefLineMapper"
+		class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+		<property name="lineTokenizer" ref="delimitedLineAlmEmpleadosTokenizer" />
+		<property name="fieldSetMapper" ref="empleadoBeanWrapperFieldSetMapper" />
+	</bean>
+
+
+	<bean id="delimitedLineAlmEmpleadosTokenizer"
 		class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+		<property name="delimiter" value="#" />
 		<property name="names" value="cif,nombre,apellidos,edad" />
 	</bean>
+
+	<bean id="empleadosReaderJson" class="org.springframework.batch.item.file.FlatFileItemReader"
+		scope="step">
+		<property name="resource"
+			value="file:#{ jobParameters['inputDir'] + jobParameters['inputFileJson'] }" />
+		<property name="encoding" value="UTF-8" />
+		<property name="lineMapper" ref="jsonEmpleadosMapper" />
+		<property name="recordSeparatorPolicy" ref="jsonRecordSepPolicy" />
+	</bean>
+
+	<bean id="jsonRecordSepPolicy"
+		class="org.springframework.batch.item.file.separator.JsonRecordSeparatorPolicy" />
+
+	<bean id="jsonEmpleadosMapper" class="profe.empleados.batch.readers.JSONWrapperEmpMapper" />
+
+	<bean id="jsonLineMapper"
+		class="org.springframework.batch.item.file.mapping.JsonLineMapper" />
 
 	<bean id="empleadoBeanWrapperFieldSetMapper"
 		class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
 		<property name="prototypeBeanName" value="empleado" />
 	</bean>
-	
+
 	<bean id="empleado" class="profe.empleados.model.Empleado" scope="prototype" />
 
+	<bean id="empleadosJdbcReader"
+		class="org.springframework.batch.item.database.JdbcCursorItemReader">
+		<property name="dataSource" ref="dataSource" />
+		<property name="sql"
+			value="select cif, nombre, apellidos, edad from empleados" />
+		<property name="rowMapper" ref="empleadoRowMapper" />
+	</bean>
+
+	<bean id="empleadoRowMapper" class="profe.empleados.batch.readers.EmpleadoRowMapper" />
+
+	<bean id="empleadosConsoleWriter"
+		class="profe.empleados.batch.writers.EmpleadosConsoleItemWriter" />
 
 	<bean id="empleadosJdbcItemWriter" class="profe.empleados.batch.writers.EmpleadosJdbcItemWriter"
-			scope="step">
+		scope="step">
 		<constructor-arg ref="dataSource" />
 	</bean>
 

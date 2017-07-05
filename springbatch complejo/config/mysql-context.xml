@@ -39,9 +39,9 @@
 		<property name="jobRepository" ref="jobRepository" />
 	</bean>
 
-<!-- 	<jdbc:initialize-database data-source="dataSource">
+ 	<jdbc:initialize-database data-source="dataSource">
 		<jdbc:script location="file:./bd/init-products-db.sql"/>
      	<jdbc:script location="file:./bd/init-empleados-db.sql"/>
-	</jdbc:initialize-database>-->
+	</jdbc:initialize-database>
  
 </beans>

@@ -100,3 +100,8 @@ fichero .xml
 Leemos los productos de la bd mediante un JdbcCursorItemReader que se apoya en un
 rowMapper personalizado, y usamos un writer personalizado (ProductConsoleItemWriter)
 para mostrarlos en consola
+
+* Ejercicio empleados - Importar y mostrar en varios pasos
+
+Importar empleados de cuatro ficheros diferentes en cuatro pasos
+y mostrar los resultados por consola

@@ -16,8 +16,8 @@ public class TestEmpleadosJob {
 	@Autowired
 	private JobLauncher jobLauncher;
 	
-	@Resource(name="importMultiItems")
-	private Job jobImportMultiItems;
+	@Resource(name="importEmpleados")
+	private Job job;
 	
 	
 	public static void main(String[] args) throws Exception {
@@ -32,9 +32,11 @@ public class TestEmpleadosJob {
 	}
 	
 	private void importEmpleados() throws Exception {
-		jobLauncher.run(jobImportMultiItems, new JobParametersBuilder()
+		jobLauncher.run(job, new JobParametersBuilder()
 				.addString("inputDir", "./data/empleados-input/")
-				.addString("inputMultiItemsFileDelOneLine", "empleprods.txt")
+				.addString("inputFileDelOneLine", "empleados-delimited.txt")
+				.addString("inputFileDelMultiLine", "empleados-delimited-multiline.txt")
+				.addString("inputFileJson", "empleados.json")
 				.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters());
 	}
