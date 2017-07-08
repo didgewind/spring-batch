@@ -19,6 +19,7 @@
 	<bean id="empleadosFileDelWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
 		<property name="resource" value="file:data/target/delimitedline-empleados.txt" />
 		<property name="lineAggregator" ref="delEmpLineAgg" />
+		<property name="headerCallback" ref="cabeceraFileEmp" />
 	</bean>
 	
 	<bean id="cabeceraFileEmp" class="profe.empleados.batch.writers.CabeceraFileEmp" />

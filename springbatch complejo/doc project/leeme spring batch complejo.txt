@@ -105,3 +105,19 @@ para mostrarlos en consola
 
 Importar empleados de cuatro ficheros diferentes en cuatro pasos
 y mostrar los resultados por consola
+
+* Ch 06 - Ejercicio Empleados - Escribir en fichero plano delimited
+
+Utilizamos un writer para escribir un empleado por línea en un fichero plano
+(empleadosFileDelWriter) con el siguiente formato:
+
+	Empleado 1#423452435T#Antonio#López#18#Fin Empleado 1
+	Empleado 2#234234324H#Etna#García#54#Fin Empleado 2
+	...
+
+Este writer se apoya en un agregador de líneas (delEmpLineAgg) quien a su 
+vez se apoya en un extractor personalizado
+(EmpContFieldExtractor), que es quien realmente da el formato a la línea.
+
+Además usamos un FlatFileHeaderCallback (CabeceraFileEmp) para escribir una
+cabecera

@@ -41,7 +41,7 @@
 
  	<jdbc:initialize-database data-source="dataSource">
 		<jdbc:script location="file:./bd/init-products-db.sql"/>
-     	<jdbc:script location="file:./bd/init-empleados-db.sql"/>
+<!--      	<jdbc:script location="file:./bd/init-empleados-db.sql"/> -->
 	</jdbc:initialize-database>
  
 </beans>
