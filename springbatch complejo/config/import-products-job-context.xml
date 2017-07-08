@@ -6,16 +6,36 @@
 	http://www.springframework.org/schema/batch 
 	http://www.springframework.org/schema/batch/spring-batch.xsd">
 
-	<job id="showProductsFromDb" xmlns="http://www.springframework.org/schema/batch">
-		<!-- <step id="decompress" next="readWriteProducts"> <tasklet ref="decompressTasklet" 
-			/> </step> -->
-		<step id="readWriteProducts">
+	<job id="importProductsWithDiscount" xmlns="http://www.springframework.org/schema/batch">
+		<step id="readWriteProducts" next="muestraProductosFromBd">
+			<tasklet>
+				<chunk reader="productsFileReader" processor="productsDiscountProcessor" 
+						writer="productsJdbcWriter"
+						commit-interval="3" skip-limit="5">
+					<skippable-exception-classes>
+						<include class="org.springframework.batch.item.file.FlatFileParseException" />
+					</skippable-exception-classes>
+				</chunk>
+			</tasklet>			
+		</step>
+		<step id="muestraProductosFromBd">
 			<tasklet>
 				<chunk reader="productsJdbcReader" writer="productsConsoleWriter" commit-interval="3" />
 			</tasklet>
 		</step>
 	</job>
 
+	<bean id="productsFileReader" class="org.springframework.batch.item.file.FlatFileItemReader" scope="step">
+		<property name="resource" value="file:#{jobParameters['targetDirectory'] + jobParameters['targetFile']}" />
+		<property name="linesToSkip" value="1" />
+		<property name="lineMapper">
+			<bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+				<property name="lineTokenizer" ref="productsDelLineTokenizer" />
+				<property name="fieldSetMapper" ref="productFieldSetMapper" />
+			</bean>
+		</property>
+	</bean>
+	
 	<bean id="productsJdbcReader"
 			class="org.springframework.batch.item.database.JdbcCursorItemReader">
 		<property name="dataSource" ref="dataSource"/>
@@ -26,10 +46,6 @@
 	<bean id="productRowMapper"
 		class="profe.springbatch.simplecatalogbatch.batch.ProductRowMapper"/>
 
-	<bean id="productsConsoleWriter"
-		class="profe.springbatch.simplecatalogbatch.batch.ProductConsoleItemWriter"
-		scope="step" />
-	
 	<bean id="productsDelLineTokenizer"
 		class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
 		<property name="names" value="PRODUCT_ID,NAME,DESCRIPTION,PRICE" />
@@ -38,6 +54,15 @@
 	<bean id="productFieldSetMapper"
 		class="profe.springbatch.simplecatalogbatch.batch.ProductFieldSetMapper" />
 
+	<bean id="productsDiscountProcessor" class="profe.springbatch.simplecatalogbatch.batch.ProductsDiscountProcessor"
+			scope="step">
+		<property name="descuento" value="10" />
+	</bean>
+	
+	<bean id="productsConsoleWriter"
+		class="profe.springbatch.simplecatalogbatch.batch.ProductConsoleItemWriter"
+		scope="step" />
+	
 	<bean id="productsJdbcWriter"
 		class="profe.springbatch.simplecatalogbatch.batch.ProductJdbcItemWriter" />
 

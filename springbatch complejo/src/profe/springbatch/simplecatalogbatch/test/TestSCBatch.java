@@ -19,7 +19,7 @@ public class TestSCBatch {
 	@Autowired
 	private JobLauncher jobLauncher;
 	
-	@Resource(name="showProductsFromDb")
+	@Resource(name="importProductsWithDiscount")
 	private Job job;
 	
 	public static void main(String[] args) throws Exception {
@@ -31,6 +31,8 @@ public class TestSCBatch {
 
 	private void go() throws Exception {
 		jobLauncher.run(job, new JobParametersBuilder()
+				.addString("targetDirectory", "./data/target/")
+				.addString("targetFile", "products.txt")
 				.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters()
 			);

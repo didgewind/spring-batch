@@ -138,3 +138,10 @@ Necesitamos especificar un stream en el tasklet de esta manera:
 </streams>
 
 para que no nos de una excepción de que el stream no está abierto
+
+
+* Ch 07 - Descuento en productos antes de insertarlos en la bd
+
+Processor (ProductsDiscountProcessor) que descuenta un porcentaje de los productos antes de meterlos
+en la bd. Además mostramos los productos por consola, para poder compararlos rápidamente
+con los pvp originales.
