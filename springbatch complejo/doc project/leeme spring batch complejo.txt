@@ -121,3 +121,20 @@ vez se apoya en un extractor personalizado
 
 Además usamos un FlatFileHeaderCallback (CabeceraFileEmp) para escribir una
 cabecera
+
+
+* Ch 06 - Ejercicio empleados - Writer composite
+
+Usamos un writer composite para escribir en dos sitios diferentes en función
+de la edad del empleado (empleadoClassItemWriter) que se apoya en un router
+personalizado (EmpleadoRouterClassifier). Leemos los empleados de la bd,
+si son mayores de edad los escribimos en el delimited file, si no los escribimos
+en consola.
+
+Necesitamos especificar un stream en el tasklet de esta manera:
+
+<streams>
+	<stream ref="empleadosFileDelWriter" />
+</streams>
+
+para que no nos de una excepción de que el stream no está abierto

@@ -2,16 +2,13 @@ Cabecera de empleados
 ---------------------
 Empleado 1#123452435T#Esthela#Ruíz#54#Fin Empleado 1
 Empleado 2#143452435L#Miguel#Ciruelo#87#Fin Empleado 2
-Empleado 3#153452435K#Javier#Bravo#14#Fin Empleado 3
-Empleado 4#163452435J#Amaya#Valiente#11#Fin Empleado 4
-Empleado 5#173452435E#Pedro#Conejero#32#Fin Empleado 5
-Empleado 6#223452435A#Manuel#Alonso#64#Fin Empleado 6
-Empleado 7#234234324H#Etna#García#54#Fin Empleado 7
-Empleado 8#323452435B#Mirkka#Touko#22#Fin Empleado 8
-Empleado 9#343235443Y#Pilar#Pozo#8#Fin Empleado 9
-Empleado 10#423452435T#Antonio#López#18#Fin Empleado 10
-Empleado 11#523452435S#Ethan#Hawk#47#Fin Empleado 11
-Empleado 12#623452435D#Jesús#Gutiérrez#81#Fin Empleado 12
-Empleado 13#723452435F#Anne#Ruíz#69#Fin Empleado 13
-Empleado 14#823452435G#Nohemí#Ruíz#77#Fin Empleado 14
-Empleado 15#923452435H#Lorena#Corujo#54#Fin Empleado 15
+Empleado 3#173452435E#Pedro#Conejero#32#Fin Empleado 3
+Empleado 4#223452435A#Manuel#Alonso#64#Fin Empleado 4
+Empleado 5#234234324H#Etna#García#54#Fin Empleado 5
+Empleado 6#323452435B#Mirkka#Touko#22#Fin Empleado 6
+Empleado 7#423452435T#Antonio#López#18#Fin Empleado 7
+Empleado 8#523452435S#Ethan#Hawk#47#Fin Empleado 8
+Empleado 9#623452435D#Jesús#Gutiérrez#81#Fin Empleado 9
+Empleado 10#723452435F#Anne#Ruíz#69#Fin Empleado 10
+Empleado 11#823452435G#Nohemí#Ruíz#77#Fin Empleado 11
+Empleado 12#923452435H#Lorena#Corujo#54#Fin Empleado 12

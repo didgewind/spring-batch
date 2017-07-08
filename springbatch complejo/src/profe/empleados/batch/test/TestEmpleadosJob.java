@@ -16,7 +16,7 @@ public class TestEmpleadosJob {
 	@Autowired
 	private JobLauncher jobLauncher;
 	
-	@Resource(name="writeEmpleadosInFile")
+	@Resource(name="writeEmpleadosDependsAge")
 	private Job job;
 	
 	
