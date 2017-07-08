@@ -145,3 +145,17 @@ para que no nos de una excepción de que el stream no está abierto
 Processor (ProductsDiscountProcessor) que descuenta un porcentaje de los productos antes de meterlos
 en la bd. Además mostramos los productos por consola, para poder compararlos rápidamente
 con los pvp originales.
+
+
+* Ch 07 - Ejercicio - Transformar empleados en productos
+
+Para que funcione tenemos que alterar el campo id de la tabla products de esta
+manera:
+
+	alter table products modify id char(10);
+
+Tenemos un processor adapter que transforma empleados en productos apoyándose
+en una clase de negocio (itemProcessorAdapter y TransformEmpleadoEnProducto).
+El job consiste en este paso y en mostrar todos los productos de la bd.
+
+Tenemos también un processor que hace lo mismo directamente (EmpleadosProductosItemProcessor)

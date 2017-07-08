@@ -16,7 +16,7 @@ public class TestEmpleadosJob {
 	@Autowired
 	private JobLauncher jobLauncher;
 	
-	@Resource(name="writeEmpleadosDependsAge")
+	@Resource(name="transformaEmpleadosEnProductos")
 	private Job job;
 	
 	

@@ -6,55 +6,33 @@
 	http://www.springframework.org/schema/batch 
 	http://www.springframework.org/schema/batch/spring-batch.xsd">
 
- 	<job id="writeEmpleadosDependsAge" xmlns="http://www.springframework.org/schema/batch">
-		<step id="writeEmpleadosDependsAgeSingleJob">
+ 	<job id="transformaEmpleadosEnProductos" xmlns="http://www.springframework.org/schema/batch">
+		<step id="tEePSingleJob" next="muestraProductosFromBd">
 			<tasklet>
-				<chunk reader="empleadosJdbcReader" writer="empleadoClassItemWriter"
-						commit-interval="3">
-					<streams>
-						<stream ref="empleadosFileDelWriter" />
-					</streams>
+				<chunk reader="empleadosJdbcReader" writer="productsJdbcWriter"
+					processor="itemProcessorAdapter" commit-interval="3">
 				</chunk>
+			</tasklet>
+		</step>
+		<step id="muestraProductosFromBd">
+			<tasklet>
+				<chunk reader="productsJdbcReader" writer="productsConsoleWriter" commit-interval="3" />
 			</tasklet>
 		</step>
 	</job>
 
-	<bean id="empleadoClassItemWriter"
-			class="org.springframework.batch.item.support.ClassifierCompositeItemWriter">
-		<property name="classifier">
-			<bean class="org.springframework.classify.BackToBackPatternClassifier">
-				<property name="routerDelegate">
-					<bean class="profe.empleados.batch.writers.EmpleadoRouterClassifier" />
-				</property>
-				<property name="matcherMap">
-					<map>
-						<entry key="A" value-ref="empleadosFileDelWriter" />
-						<entry key="M" value-ref="empleadosConsoleWriter" />
-					</map>
-				</property>
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="empleadosConsoleWriter"
-		class="profe.empleados.batch.writers.EmpleadosConsoleItemWriter" />
-
-	<bean id="empleadosFileDelWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
-		<property name="resource" value="file:data/target/delimitedline-empleados.txt" />
-		<property name="lineAggregator" ref="delEmpLineAgg" />
-		<property name="headerCallback" ref="cabeceraFileEmp" />
+	<bean id="itemProcessorAdapter"
+		class="org.springframework.batch.item.adapter.ItemProcessorAdapter">
+		<property name="targetObject" ref="transformaEmpEnProdNegocio" />
+		<property name="targetMethod" value="transforma" />
 	</bean>
 	
-	<bean id="cabeceraFileEmp" class="profe.empleados.batch.writers.CabeceraFileEmp" />
 
-	<bean id="delEmpLineAgg"
-			class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
-		<property name="delimiter" value="#" />
-		<property name="fieldExtractor">
-			<bean
-				class="profe.empleados.batch.writers.EmpContFieldExtractor" />
-		</property>
-	</bean>
+	<bean id="transformaEmpEnProdNegocio" class="profe.empleados.negocio.TransformEmpleadoEnProducto" />
+	
+	<bean id="transformaEmpEnProd" class="profe.empleados.batch.processors.EmpleadosProductosItemProcessor" />
+	
+
 
 	<bean id="empleadosJdbcReader"
 		class="org.springframework.batch.item.database.JdbcCursorItemReader">
