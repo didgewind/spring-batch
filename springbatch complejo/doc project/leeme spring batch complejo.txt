@@ -159,3 +159,9 @@ en una clase de negocio (itemProcessorAdapter y TransformEmpleadoEnProducto).
 El job consiste en este paso y en mostrar todos los productos de la bd.
 
 Tenemos también un processor que hace lo mismo directamente (EmpleadosProductosItemProcessor)
+
+
+* Ch 08 - Implementando un SkipListener
+
+Usamos un ProductsSkipListener que loggea en consola cuando skipeamos una línea errónea.
+Hay dos líneas en products.txt (la 4 y la 8) que se skipean y se loggean.

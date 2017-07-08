@@ -9,13 +9,19 @@
 	<job id="importProductsWithDiscount" xmlns="http://www.springframework.org/schema/batch">
 		<step id="readWriteProducts" next="muestraProductosFromBd">
 			<tasklet>
-				<chunk reader="productsFileReader" processor="productsDiscountProcessor" 
+				<chunk reader="productsFileReader"
 						writer="productsJdbcWriter"
 						commit-interval="3" skip-limit="5">
 					<skippable-exception-classes>
 						<include class="org.springframework.batch.item.file.FlatFileParseException" />
 					</skippable-exception-classes>
 				</chunk>
+				<listeners>
+					<listener>
+						<bean class="profe.springbatch.simplecatalogbatch.batch.ProductsSkipListener" 
+							xmlns="http://www.springframework.org/schema/beans"/>
+					</listener>
+				</listeners>
 			</tasklet>			
 		</step>
 		<step id="muestraProductosFromBd">
@@ -54,11 +60,6 @@
 	<bean id="productFieldSetMapper"
 		class="profe.springbatch.simplecatalogbatch.batch.ProductFieldSetMapper" />
 
-	<bean id="productsDiscountProcessor" class="profe.springbatch.simplecatalogbatch.batch.ProductsDiscountProcessor"
-			scope="step">
-		<property name="descuento" value="10" />
-	</bean>
-	
 	<bean id="productsConsoleWriter"
 		class="profe.springbatch.simplecatalogbatch.batch.ProductConsoleItemWriter"
 		scope="step" />
