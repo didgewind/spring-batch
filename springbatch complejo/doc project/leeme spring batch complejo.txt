@@ -177,3 +177,13 @@ de las circunstancias. Para probarlo sólo hay que alterar el fichero empleados-
 ahora está correcto (se ejecutan todos los pasos), si quitamos una almohadilla
 de una línea se skipea (nos saltamos el segundo paso), si quitamos otra almohadilla
 de otra línea superamos el límite de skips (error fatal, saltamos al al último paso)
+
+
+* Ch 10 - Intercambiando información entre pasos
+
+Dos StepExecutionListener (SkippedItemsStepListener y WriteInfoStepListener) que
+intercambian información sobre los registros skipeados y los pasos ejecutados,
+bien mediante un holder (jobInfo) o mediante el JobExecutionContext (comentamos
+uno u otro). El primer listener almacena el número de skips producidos y
+un mensaje con info, y devuelve un ExitStatus u otro para decidir cuál es el
+siguiente step. El segundo listener muestra esta info en consola

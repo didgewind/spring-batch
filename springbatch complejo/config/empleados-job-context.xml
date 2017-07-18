@@ -46,6 +46,12 @@
 				<chunk reader="empleadosJdbcReader" writer="empleadosConsoleWriter"
 					commit-interval="3">
 				</chunk>
+				<listeners>
+					<listener>
+						<bean class="profe.empleados.batch.readers.WriteInfoStepListener" 
+							xmlns="http://www.springframework.org/schema/beans"/>
+					</listener>
+				</listeners>
 			</tasklet>
 		</step>
 	</job>
@@ -116,6 +122,8 @@
 
 	<bean id="empleadoRowMapper" class="profe.empleados.batch.readers.EmpleadoRowMapper" />
 
+	<bean id="jobInfo" class="profe.empleados.batch.model.EmpleadosJobInfo" />
+	
 	<bean id="empleadosConsoleWriter"
 		class="profe.empleados.batch.writers.EmpleadosConsoleItemWriter" />
 
