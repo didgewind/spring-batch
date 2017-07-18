@@ -16,7 +16,7 @@ public class TestEmpleadosJob {
 	@Autowired
 	private JobLauncher jobLauncher;
 	
-	@Resource(name="transformaEmpleadosEnProductos")
+	@Resource(name="importEmpleados")
 	private Job job;
 	
 	
@@ -33,6 +33,10 @@ public class TestEmpleadosJob {
 	
 	private void importEmpleados() throws Exception {
 		jobLauncher.run(job, new JobParametersBuilder()
+				.addString("inputDir", "./data/empleados-input/")
+				.addString("inputFileDelOneLine", "empleados-delimited.txt")
+				.addString("inputFileDelMultiLine", "empleados-delimited-multiline.txt")
+				.addString("inputFileJson", "empleados.json")
 				.addLong("timestamp", System.currentTimeMillis())
 				.toJobParameters());
 	}
