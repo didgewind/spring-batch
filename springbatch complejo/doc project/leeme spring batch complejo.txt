@@ -1,7 +1,11 @@
 Proyecto sin maven spring batch complejo. Basado en el código de
 Spring Batch in Action. El proceso consiste en la lectura de un fichero
 con información sobre los productos de un catálogo y el paso de esa
-información a una base de datos.
+información a una base de datos. Añadimos también ficheros con información
+de empleados. Tenemos diferentes versiones en git, mostrando el team - history
+del proyecto y seleccionando show all branches and tags en esa ventana nos
+podemos ir moviendo por las diferentes versiones (haciendo checkout de la
+versión que queramos).
 
 Versiones
 =========
